@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { CheerioAPI, load } from 'cheerio';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import loadEnv from './envUtil';
 
 async function fetchPage(url: string) {
   const response = await axios.get(url);
@@ -47,7 +45,7 @@ async function getSubLinks(
 }
 
 async function getInformation() {
-  const baseUrl = process.env.BASE_URL!;
+  const [baseUrl, openAiKey] = loadEnv(['BASE_URL', 'OPEN_AI_KEY']);
   const websiteLinks = new Set<string>();
   const informationalLinks = await getSubLinks('', baseUrl, websiteLinks);
 
@@ -61,6 +59,7 @@ async function getInformation() {
 
     console.log('URL: ', url);
     console.log(paragraphTexts);
+    console.log(openAiKey);
   }
 }
 
