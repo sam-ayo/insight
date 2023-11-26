@@ -26,27 +26,30 @@ async function getSubLinks(
   websiteLinks.add('');
   try {
     const html = await fetchPage(url);
+
     const $ = load(html);
+
     const currPageLinks = extractLinks($);
-    console.log(currPageLinks);
+
     for (const link of currPageLinks) {
       if (!websiteLinks.has(link)) {
         websiteLinks.add(link);
         await getSubLinks(link, baseUrl, websiteLinks);
       }
     }
-  } catch (error) {
-    // console.log(error);
+  } catch (e) {
+    const error = e as Error;
+    console.log(error.message);
+    console.log(error.stack);
   }
 
   return websiteLinks;
 }
 
-async function getWebSite() {
+async function getInformation() {
   const baseUrl = process.env.BASE_URL!;
   const websiteLinks = new Set<string>();
   const informationalLinks = await getSubLinks('', baseUrl, websiteLinks);
-  console.log(informationalLinks);
 
   for (const link of informationalLinks) {
     const url = `${baseUrl}/${link}`;
@@ -61,4 +64,4 @@ async function getWebSite() {
   }
 }
 
-getWebSite();
+getInformation();
