@@ -23,11 +23,12 @@ async function getSubLinks(
   websiteLinks: Set<string>
 ) {
   const url = `${baseUrl}/${path}`;
-
+  websiteLinks.add('');
   try {
     const html = await fetchPage(url);
     const $ = load(html);
     const currPageLinks = extractLinks($);
+    console.log(currPageLinks);
     for (const link of currPageLinks) {
       if (!websiteLinks.has(link)) {
         websiteLinks.add(link);
@@ -45,6 +46,7 @@ async function getWebSite() {
   const baseUrl = process.env.BASE_URL!;
   const websiteLinks = new Set<string>();
   const informationalLinks = await getSubLinks('', baseUrl, websiteLinks);
+  console.log(informationalLinks);
 
   for (const link of informationalLinks) {
     const url = `${baseUrl}/${link}`;
